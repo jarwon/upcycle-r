@@ -1,26 +1,12 @@
 import * as React from "react";
 import { Link } from "gatsby";
+import PageHeader from "../components/pageheader";
 
-const Layout = ({ pageTitle, children }) => {
+const Layout = ({ children }) => {
   return (
     <div>
-      <title>{pageTitle}</title>
-      <nav>
-        <ul>
-          <li>
-            <Link to="/">Home</Link>
-          </li>
-          <li>
-            <Link to="/about">About</Link>
-          </li>
-        </ul>
-      </nav>
-      <main>
-        <h1 className="container mx-auto bg-gray-200 rounded-xl shadow border p-8 m-10">
-          {pageTitle}
-        </h1>
-        {children}
-      </main>
+      <PageHeader pageTitle="upcycle" />
+      <main>{children}</main>
     </div>
   );
 };
