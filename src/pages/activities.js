@@ -2,17 +2,20 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
 import Layout from "../components/layout";
+import ActivityTile from "../components/activity-tile";
+import { navigate } from "gatsby";
 
 const clientId = 83167;
 const clientSecret = "36073471fd5bf8f963ade25fe5642a5699c0dc4d";
-const token = "c6ec1af1bd27a74fced84a48bd0e1558504bfb52";
+const token = "c9f0108dd563920328846970fed21a1a7311c0e5";
 const baseUrl = "https://www.strava.com/api/v3";
 
 // Step 2: Define your component
 const ActivitiesPage = () => {
   //define state
   // const [ActivityIds, setActivityIds] = useState();
-  const [Activities, setActivities] = useState();
+  const [activities, setActivities] = useState();
+  const [typeOfActivity, setTypeOfActivity] = useState("all");
 
   const getData = () => {
     const url = `${baseUrl}/athlete/activities?scope=activity:read_all&per_page=3"`;
@@ -66,23 +69,27 @@ const ActivitiesPage = () => {
   //   });
   // }, [Activities]);
 
-  const convertSpeed = (speed) => {
-    let converted = speed * 3.6;
-    return converted.toFixed(2);
-  };
+  // const filteredActivities = activities.filter((activity) =>
+  //   activity.type.toLowerCase().includes(typeOfActivity.toLowerCase())
+  // );
 
   //early return
-  if (!Activities) {
+  if (!activities) {
     return <div>Loading</div>;
   }
 
   return (
     <Layout>
       <div>
-        <label for="activity-select">Filter Activities</label>
+        <label htmlFor="activity-select">Filter Activities</label>
 
-        <select name="activities" id="activity-select">
-          <option value="">--Please choose an option--</option>
+        <select
+          name="activities"
+          id="activity-select"
+          onChange={(e) => setTypeOfActivity(e.target.value)}
+          value={typeOfActivity}
+        >
+          <option value="all">Please choose an option</option>
           <option value="ride">Ride</option>
           <option value="virtual ride">Virtual Ride</option>
           <option value="run">Run</option>
@@ -91,15 +98,39 @@ const ActivitiesPage = () => {
       </div>
       <div>
         <p>Activities:</p>
-        {Activities.map((activity) => (
-          <div key={activity.id} className="m-3">
-            <h2>{activity.name}</h2>
-            <p>Average speed: {convertSpeed(activity.average_speed)} km/h</p>
-            <p>Average watts: {activity.average_watts}</p>
-            <p>Calories: {activity.calories}</p>
-            <p>Relative effort: {activity.suffer_score}</p>
-          </div>
-        ))}
+
+        <div className="activity">
+          {activities.map((activity) => {
+            if (
+              activity.type.toLowerCase() === typeOfActivity.toLowerCase() ||
+              typeOfActivity === "all"
+            )
+              return (
+                <div key={activity.id}>
+                  <ActivityTile
+                    activities={activities}
+                    name={activity.name}
+                    averageSpeed={activity.average_speed}
+                    averageWatts={activity.average_watts}
+                    calories={activity.calories}
+                    sufferScore={activity.sufferScore}
+                    type={activity.type}
+                  />
+                  <button
+                    onClick={(event) => {
+                      event.preventDefault();
+                      console.log(activity);
+                      navigate(`/activity/${activity.id}`, {
+                        state: { activities },
+                      });
+                    }}
+                  >
+                    go to activity
+                  </button>
+                </div>
+              );
+          })}
+        </div>
       </div>
     </Layout>
   );
