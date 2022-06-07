@@ -13,10 +13,14 @@ const PageHeader = ({ pageTitle, children }) => {
               <h1>{pageTitle}</h1>
             </li>
             <li>
-              <Link to="/">Home</Link>
+              <Link to="/" activeClassName="active">
+                Home
+              </Link>
             </li>
             <li>
-              <Link to="/activities">Activities</Link>
+              <Link to="/activities" activeClassName="active">
+                Activities
+              </Link>
             </li>
           </ul>
           <Profile />

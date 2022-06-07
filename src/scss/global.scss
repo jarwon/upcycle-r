@@ -5,3 +5,12 @@
 /* @import popup.css body {
   @apply bg-purple-200;
 } */
+
+body {
+  font-family: 'Inter', sans-serif;
+}
+
+.active {
+  text-decoration: underline;
+  color: white;
+}
