@@ -1,13 +1,17 @@
 import * as React from "react";
-import { Link } from "gatsby";
 import PageHeader from "../components/pageheader";
+import { authContext } from "../context/provider";
 
 const Layout = ({ children }) => {
   return (
-    <div>
-      <PageHeader pageTitle="upcycle" />
-      <main>{children}</main>
-    </div>
+    <authContext.Consumer>
+      {(context) => (
+        <>
+          <PageHeader pageTitle="upcycle" />
+          <main>{children}</main>
+        </>
+      )}
+    </authContext.Consumer>
   );
 };
 
