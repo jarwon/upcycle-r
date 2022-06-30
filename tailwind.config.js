@@ -4,6 +4,8 @@ module.exports = {
     extend: {
       fontFamily: {
         inter: ["'Inter', sans-serif"],
+        spline: ["'Spline Sans Mono', monospace"],
+        playfairDisplay: ["'Playfair Display', serif"],
       },
     },
   },

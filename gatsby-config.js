@@ -1,3 +1,7 @@
+require("dotenv").config({
+  path: `.env.${process.env.NODE_ENV}`,
+});
+
 module.exports = {
   siteMetadata: {
     title: `upcycle-r`,
@@ -12,5 +16,6 @@ module.exports = {
       },
     },
     "gatsby-plugin-postcss",
+    "gatsby-plugin-use-query-params",
   ],
 };
