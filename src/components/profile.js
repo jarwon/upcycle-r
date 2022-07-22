@@ -1,14 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { getAthlete } from "../../utilities/strava";
+import { authContext } from "../context/provider";
 
-const Profile = () => {
+const Profile = ({ margin, profilePicSize }) => {
   const [user, setUser] = useState();
-  const [ftpToggle, setFtpToggle] = useState(false);
   const [error, setError] = useState(null);
+  const { makeStravaRequest } = useContext(authContext);
 
   const getData = async () => {
     try {
-      const res = await getAthlete();
+      const res = await makeStravaRequest("GET", getAthlete);
       if (res.ok) {
         const userData = await res.json();
         setUser(userData);
@@ -27,31 +28,29 @@ const Profile = () => {
   };
 
   return (
-    <div>
-      <header className="flex lowercase">
-        {user && (
-          <>
-            <div className="mr-3">
-              <img src={user.profile} />
-            </div>
-            <div>
-              <p>
-                {user.firstname} {user.lastname}
-              </p>
-              <p>
-                {user.city}, {user.country}
-              </p>
-              <p>
-                {user.weight}kg, {(user.weight * 2.205).toFixed(0)}lbs
-              </p>
-              <p className="font-bold">
-                {user.ftp}W, {calcWKg()}
-              </p>
-            </div>
-          </>
-        )}
-      </header>
-    </div>
+    <header className={`flex lowercase text-sm ${margin}`}>
+      {user && (
+        <>
+          <div className={`mr-3 ${profilePicSize}`}>
+            <img src={user.profile} alt="profile photo" />
+          </div>
+          <div>
+            <p>
+              {user.firstname} {user.lastname}
+            </p>
+            <p>
+              {user.city}, {user.country}
+            </p>
+            <p>
+              {user.weight}kg, {(user.weight * 2.205).toFixed(0)}lbs
+            </p>
+            <p className="font-bold">
+              {user.ftp}W, {calcWKg()}
+            </p>
+          </div>
+        </>
+      )}
+    </header>
   );
 };
 

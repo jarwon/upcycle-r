@@ -2,29 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
-// body {
-//   font-family: 'Inter', sans-serif;
-// }
-
-nav {
-  font-family: 'Spline Sans Mono', monospace;
-  color: #dcc9b6;
+html {
+  @apply text-gray-600;
 }
-
-// body {
-//   font-family: 'Spline Sans Mono', monospace;
-// }
 
 .active {
   border-bottom: 2px solid #dcc9b6;
 }
 
 button {
-  background: rgb(4, 47, 18);
+  // background: rgb(4, 47, 18);
+  background: #a39171;
   padding: 2px 5px;
   color: white;
-}
-
-.tile {
-  background: rgba(220, 201, 182, 0.5);
 }
