@@ -1,25 +1,25 @@
-import React, { useState, useRef, useMemo } from "react";
+import React, { useState, useMemo, useContext, useEffect } from "react";
 import Layout from "../components/layout";
 import PowerTable from "../components/power-table";
 import { getActivities, getZones } from "../../utilities/strava";
 import { getLastWeeksDate, dateToEpoch } from "../../utilities/date";
 import { Bar } from "react-chartjs-2";
 import { Chart as ChartJS } from "chart.js/auto";
-import { navigate } from "gatsby";
+import { authContext } from "../context/provider";
 
-const initialPowerZones = {
-  ["0"]: 0,
-  "0-50": 0,
-  "50-100": 0,
-  "100-150": 0,
-  "150-200": 0,
-  "200-250": 0,
-  "250-300": 0,
-  "300-350": 0,
-  "350-400": 0,
-  "400-450": 0,
-  "450+": 0,
-};
+// const initialPowerZones = {
+//   ["0"]: 0,
+//   "0-50": 0,
+//   "50-100": 0,
+//   "100-150": 0,
+//   "150-200": 0,
+//   "200-250": 0,
+//   "250-300": 0,
+//   "300-350": 0,
+//   "350-400": 0,
+//   "400-450": 0,
+//   "450+": 0,
+// };
 
 const options = {
   responsive: true,
@@ -31,6 +31,7 @@ const options = {
     title: {
       display: true,
       text: "Power Zone Distribution in the Last 7 Days",
+      size: 20,
     },
     tooltip: {
       callbacks: {
@@ -90,24 +91,44 @@ const formatTime = (minutes) => {
   return ret;
 };
 
-const Zones = () => {
+const Zones = ({ location }) => {
   const currentDate = new Date();
   const lastWeeksDate = getLastWeeksDate(currentDate);
   const [rides, setRides] = useState();
   const [totalPowerZones, setTotalPowerZones] = useState();
+  const { makeStravaRequest } = useContext(authContext);
 
-  const renderCounter = useRef(0);
-  renderCounter.current = renderCounter.current + 1;
+  // var bar_ctx = document.getElementById("chart").getContext("2d");
 
-  const handleClick = async () => {
+  // var background_1 = bar_ctx.createLinearGradient(0, 0, 0, 600);
+  // background_1.addColorStop(0, "red");
+  // background_1.addColorStop(1, "blue");
+
+  // var background_2 = bar_ctx.createLinearGradient(0, 0, 0, 600);
+  // background_2.addColorStop(0, "green");
+  // background_2.addColorStop(1, "orange");
+
+  // var background_3 = bar_ctx.createLinearGradient(0, 0, 0, 600);
+  // background_3.addColorStop(0, "orange");
+  // background_3.addColorStop(1, "purple");
+
+  // var background_4 = bar_ctx.createLinearGradient(0, 0, 0, 600);
+  // background_4.addColorStop(0, "green");
+  // background_4.addColorStop(1, "violet");
+
+  const getData = async () => {
     try {
-      const res = await getActivities({
-        before: dateToEpoch(currentDate),
-        after: dateToEpoch(lastWeeksDate),
-        // per_page: 5,
-      });
+      const res = await makeStravaRequest(
+        "GET",
+        getActivities({
+          before: dateToEpoch(currentDate),
+          after: dateToEpoch(lastWeeksDate),
+          // per_page: 5,
+        })
+      );
       if (res.ok) {
         const activities = await res.json();
+        console.log(activities);
         saveRides(activities);
       }
     } catch (error) {
@@ -121,7 +142,7 @@ const Zones = () => {
     });
     try {
       activitiesByRides.forEach(async (ride, index) => {
-        const res = await getZones(ride.id);
+        const res = await makeStravaRequest("GET", getZones(ride.id));
         if (res.ok) {
           const zoneData = await res.json();
           const heartrate = zoneData.find((zoneItem) => {
@@ -132,7 +153,7 @@ const Zones = () => {
           });
 
           activitiesByRides[index].heartrateZones =
-            heartrate.distribution_buckets;
+            heartrate?.distribution_buckets;
           activitiesByRides[index].powerZones = power.distribution_buckets;
 
           console.log(ride);
@@ -174,19 +195,33 @@ const Zones = () => {
             return secondsToMinutes(totalPowerZones[label]);
           }),
           backgroundColor: "rgba(171, 196, 171, 0.7)",
+          // backgroundColor: [
+          //   "rgb(156 163 176 / 1)",
+          //   "rgb(156 163 176 / 1)",
+          //   "rgb(156 163 176 / 1)",
+          //   "rgb(97 165 250)",
+          //   "rgb(74 223 129)",
+          //   "rgba(255, 159, 64, 0.2)",
+          // ],
           xAxisID: "x",
         },
       ],
     };
   }, [labels]);
 
+  useEffect(() => {
+    getData();
+  }, []);
+
   return (
-    <Layout>
-      <div>
-        <button onClick={handleClick}>click</button>
-        <h1>Renders: {renderCounter.current}</h1>
-        <PowerTable />
-        {data && <Bar data={data} options={options} />}
+    <Layout location={location}>
+      <div className="lg:flex">
+        <div className="lg:w-1/4">
+          <PowerTable />
+        </div>
+        <div className="lg:w-3/4">
+          {data && <Bar data={data} options={options} />}
+        </div>
       </div>
     </Layout>
   );
