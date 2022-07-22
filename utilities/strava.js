@@ -1,13 +1,12 @@
 const options = {
   method: "GET",
-  headers: { Authorization: `Bearer ${process.env.STRAVA_API_ACCESS_TOKEN}` },
-  // headers: { Authorization: `Bearer ${localStorage.getItem("access_token")}` },
-};
-
-export const login = async (code) => {
-  const res = await fetch(
-    `https://www.strava.com/oauth/authorize?client_id=${process.env.STRAVA_API_CLIENT_ID}&redirect_uri=http://localhost:8000/auth&response_type=${code}&scope=activity:read_all,profile:read_all`
-  );
+  headers: {
+    Authorization: `Bearer ${
+      localStorage.getItem("access_token")
+        ? JSON.parse(localStorage.getItem("access_token"))
+        : null
+    }`,
+  },
 };
 
 export const exchangeToken = async (code) => {
@@ -32,54 +31,29 @@ export const getAccessToken = async (refreshToken) => {
   return res;
 };
 
-export const getZones = async (id) => {
-  const res = await fetch(
-    `${process.env.STRAVA_API_URL}/activities/${id}/zones`,
-    options
-  );
-  return res;
+export const getAccessTokenEndpoint = (refreshToken) => {
+  return `${process.env.STRAVA_API_URL}/oauth/token?client_id=${process.env.STRAVA_API_CLIENT_ID}&client_secret=${process.env.STRAVA_API_CLIENT_SECRET}&grant_type=refresh_token&refresh_token=${refreshToken}`;
 };
 
-export const getActivities = async (searchParams) => {
-  const res = await fetch(
+export const getZones = (id) => {
+  return `${process.env.STRAVA_API_URL}/activities/${id}/zones`;
+};
+
+export const getActivities = (searchParams) => {
+  return (
     `${process.env.STRAVA_API_URL}/athlete/activities?` +
-      new URLSearchParams(searchParams).toString(),
-    options
+    new URLSearchParams(searchParams).toString()
   );
-  return res;
 };
 
-// export const getActivitiesWithId = async (searchParams) => {
-//   const res = await fetch(
-//     `${process.env.STRAVA_API_URL}/athlete/activities?` +
-//       new URLSearchParams(searchParams).toString(),
-//     options
-//   );
-//   const data = await res.json();
-//   return data;
-// };
-
-export const getActivity = async (id) => {
-  const res = await fetch(
-    `${process.env.STRAVA_API_URL}/activities/${id}`,
-    options
-  );
-  // const data = await res.json();
-  // return data;
-  return res;
+export const getActivity = (id) => {
+  return `${process.env.STRAVA_API_URL}/activities/${id}?include_all_efforts=`;
 };
 
-export const getAthlete = async () => {
-  const res = await fetch(`${process.env.STRAVA_API_URL}/athlete`, options);
-  // const data = await res.json();
-  // return data;
-  return res;
-};
+export const getAthlete = `${process.env.STRAVA_API_URL}/athlete`;
 
-export const getAthleteZones = async () => {
-  const res = await fetch(
-    `${process.env.STRAVA_API_URL}/athlete/zones`,
-    options
-  );
-  return res;
+export const athleteZonesEndpoint = `${process.env.STRAVA_API_URL}/athlete/zones`;
+
+export const getEquipment = (id) => {
+  return `${process.env.STRAVA_API_URL}/gear/${id}`;
 };
