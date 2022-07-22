@@ -2,17 +2,15 @@ import React, { useContext } from "react";
 import Layout from "../components/layout";
 import { authContext } from "../context/provider";
 
-const IndexPage = () => {
+const IndexPage = ({ location }) => {
   const { auth } = useContext(authContext);
-  console.log(auth);
+
+  const loginURL = `https://www.strava.com/oauth/authorize?client_id=${process.env.STRAVA_API_CLIENT_ID}&redirect_uri=http://localhost:8000/auth&response_type=code&scope=activity:read_all,profile:read_all`;
   return (
-    <Layout pageTitle="upcycle">
+    <Layout pageTitle="upcycle" location={location}>
       {!auth && (
         <div className="flex justify-center mt-3">
-          <a
-            href="https://www.strava.com/oauth/authorize?client_id=83167&redirect_uri=http://localhost:8000/auth&response_type=code&scope=activity:read_all,profile:read_all"
-            className="font-spline bg-green-900 text-white p-3"
-          >
+          <a href={loginURL} className="spline bg-green-900 text-white p-3">
             login
           </a>
         </div>
