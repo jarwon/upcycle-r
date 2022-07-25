@@ -4,7 +4,12 @@ import { getAccessToken, getAccessTokenEndpoint } from "../../utilities/strava";
 import { expiresAt } from "../../utilities/date";
 import { navigate } from "gatsby";
 
-export const authContext = React.createContext();
+export const authContext = React.createContext({
+  // auth: false,
+  // setAuth: null,
+  // makeStravaRequest: null,
+  // setStravaToken: null,
+});
 
 const Provider = ({ children }) => {
   const [auth, setAuth] = useState(false);
@@ -38,6 +43,10 @@ const Provider = ({ children }) => {
   //wrapper function that takes in method type and URLs to handle all calls
   const makeStravaRequest = async (method, requestURL) => {
     //store state in local variable within function
+    console.log(auth);
+    if (!tokenInfo) {
+      return navigate("/", { replace: true });
+    }
     let currentTokenInfo = tokenInfo;
     //check if access token has expired
     if (expiresAt(currentTokenInfo.expires_at) < Date.now()) {
@@ -58,22 +67,19 @@ const Provider = ({ children }) => {
   }, [tokenInfo]);
 
   useEffect(() => {
+    console.log(auth);
     if (!auth) {
       navigate("/", { replace: true });
     }
   }, [auth]);
 
-  if (typeof window !== "undefined") {
-    return (
-      <authContext.Provider
-        value={{ auth, setAuth, makeStravaRequest, setStravaToken }}
-      >
-        {children}
-      </authContext.Provider>
-    );
-  } else {
-    return null;
-  }
+  return (
+    <authContext.Provider
+      value={{ auth, setAuth, makeStravaRequest, setStravaToken }}
+    >
+      {children}
+    </authContext.Provider>
+  );
 };
 
 export default ({ element }) => <Provider>{element}</Provider>;

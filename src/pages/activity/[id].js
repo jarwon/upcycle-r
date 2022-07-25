@@ -6,6 +6,10 @@ import { formatTime } from "../../../utilities/date";
 import { navigate } from "gatsby";
 
 const ActivityPage = ({ location }) => {
+  if (!location?.state?.activity) {
+    return null;
+  }
+
   const {
     state: { activity },
   } = location;
@@ -17,8 +21,6 @@ const ActivityPage = ({ location }) => {
     total_elevation_gain,
     segment_efforts,
   } = activity;
-
-  useEffect(() => {}, []);
 
   return (
     <Layout location={location}>

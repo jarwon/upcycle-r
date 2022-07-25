@@ -98,24 +98,6 @@ const Zones = ({ location }) => {
   const [totalPowerZones, setTotalPowerZones] = useState();
   const { makeStravaRequest } = useContext(authContext);
 
-  // var bar_ctx = document.getElementById("chart").getContext("2d");
-
-  // var background_1 = bar_ctx.createLinearGradient(0, 0, 0, 600);
-  // background_1.addColorStop(0, "red");
-  // background_1.addColorStop(1, "blue");
-
-  // var background_2 = bar_ctx.createLinearGradient(0, 0, 0, 600);
-  // background_2.addColorStop(0, "green");
-  // background_2.addColorStop(1, "orange");
-
-  // var background_3 = bar_ctx.createLinearGradient(0, 0, 0, 600);
-  // background_3.addColorStop(0, "orange");
-  // background_3.addColorStop(1, "purple");
-
-  // var background_4 = bar_ctx.createLinearGradient(0, 0, 0, 600);
-  // background_4.addColorStop(0, "green");
-  // background_4.addColorStop(1, "violet");
-
   const getData = async () => {
     try {
       const res = await makeStravaRequest(

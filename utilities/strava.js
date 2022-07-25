@@ -2,8 +2,7 @@ const options = {
   method: "GET",
   headers: {
     Authorization: `Bearer ${
-      typeof window !== "undefined" &&
-      window.localStorage.getItem("access_token")
+      typeof window !== "undefined" && localStorage.getItem("access_token")
         ? JSON.parse(localStorage.getItem("access_token"))
         : null
     }`,

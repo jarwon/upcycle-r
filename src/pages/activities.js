@@ -97,7 +97,7 @@ const ActivitiesPage = ({ location }) => {
                 <ActivityTile
                   handleClick={(event) => {
                     event.preventDefault();
-                    navigate(`/activities/${activity.id}`, {
+                    navigate(`/activity/${activity.id}`, {
                       state: { activity },
                     });
                   }}
