@@ -73,7 +73,6 @@ const ActivityPage = ({ location }) => {
               segment,
             } = seg;
             if (pr_rank === 1) {
-              console.log(seg);
               return (
                 <div
                   className="flex-col w-full mb-3 bg-green-50 p-3"

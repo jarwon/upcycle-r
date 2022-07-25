@@ -33,5 +33,6 @@ module.exports = {
     },
     "gatsby-plugin-postcss",
     "gatsby-plugin-use-query-params",
+    "gatsby-plugin-gatsby-cloud",
   ],
 };

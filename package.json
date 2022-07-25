@@ -24,6 +24,7 @@
     "classnames": "^2.3.1",
     "gatsby": "^4.14.0",
     "gatsby-plugin-breadcrumb": "^12.3.1",
+    "gatsby-plugin-gatsby-cloud": "^4.19.0",
     "gatsby-plugin-postcss": "^5.14.0",
     "gatsby-plugin-sass": "^5.14.0",
     "gatsby-plugin-use-query-params": "^1.0.1",
