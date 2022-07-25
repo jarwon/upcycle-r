@@ -63,13 +63,17 @@ const Provider = ({ children }) => {
     }
   }, [auth]);
 
-  return (
-    <authContext.Provider
-      value={{ auth, setAuth, makeStravaRequest, setStravaToken }}
-    >
-      {children}
-    </authContext.Provider>
-  );
+  if (typeof window !== "undefined") {
+    return (
+      <authContext.Provider
+        value={{ auth, setAuth, makeStravaRequest, setStravaToken }}
+      >
+        {children}
+      </authContext.Provider>
+    );
+  } else {
+    return null;
+  }
 };
 
 export default ({ element }) => <Provider>{element}</Provider>;

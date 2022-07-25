@@ -189,7 +189,7 @@ const GearPage = ({ location }) => {
 
           {accessories?.map((category, index) => {
             return (
-              <div className="my-5 p-4 bg-green-50">
+              <div className="my-5 p-4 bg-green-50" key={index}>
                 <h3 className="uppercase text-sm text-green-900 font-medium">
                   {category.category}
                 </h3>
