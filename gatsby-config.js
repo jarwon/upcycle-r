@@ -5,7 +5,7 @@ require("dotenv").config({
 module.exports = {
   siteMetadata: {
     title: `upcycle-r`,
-    siteUrl: process.env.STRAVA_API_REDIRECT_URI,
+    siteUrl: process.env.GATSBY_STRAVA_API_REDIRECT_URI,
   },
   plugins: [
     {

@@ -5,7 +5,7 @@ import { authContext } from "../context/provider";
 const IndexPage = ({ location }) => {
   const { auth } = useContext(authContext);
 
-  const loginURL = `https://www.strava.com/oauth/authorize?client_id=${process.env.STRAVA_API_CLIENT_ID}&redirect_uri=${process.env.STRAVA_API_REDIRECT_URI}/auth&response_type=code&scope=activity:read_all,profile:read_all`;
+  const loginURL = `https://www.strava.com/oauth/authorize?client_id=${process.env.GATSBY_STRAVA_API_CLIENT_ID}&redirect_uri=${process.env.GATSBY_STRAVA_API_REDIRECT_URI}/auth&response_type=code&scope=activity:read_all,profile:read_all`;
   return (
     <Layout pageTitle="upcycle" location={location}>
       {!auth && (
