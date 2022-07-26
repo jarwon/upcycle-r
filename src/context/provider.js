@@ -4,12 +4,7 @@ import { getAccessToken, getAccessTokenEndpoint } from "../../utilities/strava";
 import { expiresAt } from "../../utilities/date";
 import { navigate } from "gatsby";
 
-export const authContext = React.createContext({
-  // auth: false,
-  // setAuth: null,
-  // makeStravaRequest: null,
-  // setStravaToken: null,
-});
+export const authContext = React.createContext({});
 
 const Provider = ({ children }) => {
   const [auth, setAuth] = useState(false);
@@ -34,7 +29,6 @@ const Provider = ({ children }) => {
       headers: { Authorization: `Bearer: ${tokenInfo.access_token}` },
     });
     const data = await res.json();
-    console.log(data);
     //store data in state
     setStravaToken(data);
     return data;
@@ -43,7 +37,6 @@ const Provider = ({ children }) => {
   //wrapper function that takes in method type and URLs to handle all calls
   const makeStravaRequest = async (method, requestURL) => {
     //store state in local variable within function
-    console.log(auth);
     if (!tokenInfo) {
       return navigate("/", { replace: true });
     }
@@ -67,7 +60,6 @@ const Provider = ({ children }) => {
   }, [tokenInfo]);
 
   useEffect(() => {
-    console.log(auth);
     if (!auth) {
       navigate("/", { replace: true });
     }

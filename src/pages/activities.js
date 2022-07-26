@@ -5,6 +5,7 @@ import Layout from "../components/layout";
 import ActivityTile from "../components/activity-tile";
 import { navigate } from "gatsby";
 import { getActivities, getActivity } from "../../utilities/strava";
+import { getLastWeeksDate, dateToEpoch } from "../../utilities/date";
 import { authContext } from "../context/provider";
 
 const sortActivitiesByDate = (activities) => {
@@ -14,6 +15,8 @@ const sortActivitiesByDate = (activities) => {
 };
 
 const ActivitiesPage = ({ location }) => {
+  const currentDate = new Date();
+  const lastWeeksDate = getLastWeeksDate(currentDate);
   const [activities, setActivities] = useState();
   const [typeOfActivity, setTypeOfActivity] = useState("all");
   const { makeStravaRequest } = useContext(authContext);
@@ -24,13 +27,12 @@ const ActivitiesPage = ({ location }) => {
         "GET",
         getActivities({
           scope: "activity:read_all",
-          per_page: 3,
-          //change to past week
+          before: dateToEpoch(currentDate),
+          after: dateToEpoch(lastWeeksDate),
         })
       );
       if (res.ok) {
         const activitiesData = await res.json();
-        console.log(activitiesData);
         const activitiesTemp = await Promise.all(
           activitiesData.map(async ({ id }) => {
             try {
@@ -45,7 +47,6 @@ const ActivitiesPage = ({ location }) => {
         );
         setActivities(activitiesTemp);
       }
-      // throw new Error(res.status);
     } catch (error) {
       console.error(error);
     }
@@ -61,7 +62,10 @@ const ActivitiesPage = ({ location }) => {
 
   return (
     <Layout location={location}>
-      <div>
+      <div className="flex flex-col md:flex-row md:justify-between md:items-center">
+        <h2 className="uppercase text-sm text-green-900 font-medium mb-3 md:mb-0">
+          Activities in the Last 7 Days
+        </h2>
         <div className="flex justify-end items-center">
           <label
             htmlFor="activity-select"

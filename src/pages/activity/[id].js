@@ -13,13 +13,13 @@ const ActivityPage = ({ location }) => {
   const {
     state: { activity },
   } = location;
-  console.log(activity);
   const {
     name,
     achievement_count,
     pr_count,
     total_elevation_gain,
     segment_efforts,
+    best_efforts,
   } = activity;
 
   return (
@@ -126,6 +126,29 @@ const ActivityPage = ({ location }) => {
                         %
                       </p>
                     </div>
+                  </div>
+                </div>
+              );
+            }
+          })}
+          {best_efforts?.map((effort, index) => {
+            const { name, pr_rank, elapsed_time } = effort;
+            if (pr_rank === 1) {
+              return (
+                <div
+                  className="flex-col w-full mb-3 bg-green-50 p-3"
+                  key={index}
+                >
+                  <p className="uppercase text-sm text-green-900 font-medium mb-2">
+                    {name}
+                  </p>
+                  <div className="flex">
+                    <p>
+                      <span className="uppercase text-xs">time </span>
+                      <span className="font-spline">
+                        {formatTime(elapsed_time / 60)}
+                      </span>
+                    </p>
                   </div>
                 </div>
               );

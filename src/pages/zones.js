@@ -7,20 +7,6 @@ import { Bar } from "react-chartjs-2";
 import { Chart as ChartJS } from "chart.js/auto";
 import { authContext } from "../context/provider";
 
-// const initialPowerZones = {
-//   ["0"]: 0,
-//   "0-50": 0,
-//   "50-100": 0,
-//   "100-150": 0,
-//   "150-200": 0,
-//   "200-250": 0,
-//   "250-300": 0,
-//   "300-350": 0,
-//   "350-400": 0,
-//   "400-450": 0,
-//   "450+": 0,
-// };
-
 const options = {
   responsive: true,
   plugins: {
@@ -105,12 +91,10 @@ const Zones = ({ location }) => {
         getActivities({
           before: dateToEpoch(currentDate),
           after: dateToEpoch(lastWeeksDate),
-          // per_page: 5,
         })
       );
       if (res.ok) {
         const activities = await res.json();
-        console.log(activities);
         saveRides(activities);
       }
     } catch (error) {
@@ -137,8 +121,6 @@ const Zones = ({ location }) => {
           activitiesByRides[index].heartrateZones =
             heartrate?.distribution_buckets;
           activitiesByRides[index].powerZones = power.distribution_buckets;
-
-          console.log(ride);
 
           const powerZonesPerRide = ride.powerZones;
           powerZonesPerRide.forEach((individualPowerZone) => {
@@ -177,14 +159,6 @@ const Zones = ({ location }) => {
             return secondsToMinutes(totalPowerZones[label]);
           }),
           backgroundColor: "rgba(171, 196, 171, 0.7)",
-          // backgroundColor: [
-          //   "rgb(156 163 176 / 1)",
-          //   "rgb(156 163 176 / 1)",
-          //   "rgb(156 163 176 / 1)",
-          //   "rgb(97 165 250)",
-          //   "rgb(74 223 129)",
-          //   "rgba(255, 159, 64, 0.2)",
-          // ],
           xAxisID: "x",
         },
       ],
